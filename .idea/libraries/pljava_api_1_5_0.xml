@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pljava-api-1.5.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/pljava-api-1.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
