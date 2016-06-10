@@ -42,48 +42,111 @@ public class Server {
 
                 //stmt.executeUpdate("insert into  product values(default,'MCI3',1, true, true  )");
 
+                /*****************product*********************/
                 // Check if the product is already in the Db if yes we have to update if not then we have to insert
                 // TODO :Change the values to the corresponding variables
+                int stepId,productId,testNb,parameterId,failMessageId;
                 rs =stmt.executeQuery("select * from sn where \"SerialNumber\"='number'");
-
-                if(rs.next()) {
-                    // TODO :Change the values to the corresponding variables and increment the total number of tests
-                    stmt.executeUpdate("update product set \"LastStatus\"='true' where \"ProductId\"="+rs.getInt("ProductId"));
-                    System.out.println("nop");
-
-                }
-
-                else
+                if(rs.next()) //if the productid already exists
                 {
-                    // TODO :Change the values to the corresponding variables
-                    stmt.executeUpdate("insert into sn values(1,'sn'  )");
-                    // TODO :Change the values to the corresponding variables
-                    stmt.executeUpdate("insert into product values(default,'pref',1,'true','true')");
-                }
 
-                // Check if the step is already in the Db if yes we have to update if not then we have to insert
-                // TODO :Change the values to the corresponding variables
-
-                rs =stmt.executeQuery("select * from stepname where \"StepName\"='step'"); // Upper cases must be escaped with a backslash
-
-                if(rs.next())
-                {
+                    productId=rs.getInt("ProductId");
                     // TODO :Change the values to the corresponding variables and increment the total number of tests
-                    stmt.executeQuery("select * from step where \"StepName\"="+rs.getInt("StepId")+" and \"Date\"='2008-11-11 13:23:44'"); // Upper cases must be escaped with a backslash
-                    if(!rs.next())
+                    stmt.executeUpdate("update product set \"LastStatus\"='true' where \"ProductId\"="+productId);
+
+                    /*****************failmessage*********************/
+                    // Check if the fail message is already in the Db if yes we have to update if not then we have to insert
+                    // TODO :Change the values to the corresponding variables
+                    failMessageId=-1;
+                    rs = stmt.executeQuery("select * from failmessage where \"FailMessage\"='message'"); // Upper cases must be escaped with a backslash
+
+                    if (!rs.next()) //ifja the message doesn't exist
                     {
-                        stmt.executeUpdate("insert into step values(Default,'2008-11-11 13:23:44','OK','OK','OK'  )");
+                        failMessageId=stmt.executeUpdate("insert into failmessage values(Default,'Message')",Statement.RETURN_GENERATED_KEYS);
+                    }
+                    else
+                    {
+                        //do nothing
+                        }
 
+                    /*****************ParameterName*********************/
+                    // Check if the parameter name is already in the Db if yes we have to update if not then we have to insert
+                    // TODO :Change the values to the corresponding variables
+                    rs = stmt.executeQuery("select * from parametername where \"ParameterName\"='param'"); // Upper cases must be escaped with a backslash
+
+                    if (!rs.next()) //if the parameter name doesn't exist
+                    {
+                        parameterId=stmt.executeUpdate("insert into parametername values(Default,'param')",Statement.RETURN_GENERATED_KEYS);
+                        stmt.executeUpdate("insert into parameter values("+productId+","+parameterId+",'2008-11-11 13:23:44','null')");
+                    }
+                    else
+                    {
+                        //do nothing
                     }
 
+                    /*****************test*********************/
+                    // Check if the test is already in the Db if yes we have to update if not then we have to insert
+                    // TODO :Change the values to the corresponding variables
+                    rs =stmt.executeQuery("select * from test where \"ProductId\"='step'"); // Upper cases must be escaped with a backslash
+
+
+                    if(!rs.next()) //if the test doesn't exist
+                    {
+                        if(failMessageId==-1)
+                        testNb=stmt.executeUpdate("insert into test values("+productId+", '2008-11-11 13:23:44','1',default,'passed',,)",Statement.RETURN_GENERATED_KEYS);
+                        else
+                        {
+                            rs =stmt.executeQuery("select * from failmessage where \"FailedMessage\"='message'");
+                            testNb=stmt.executeUpdate("insert into test values("+productId+", '2008-11-11 13:23:44','1',default,'passed',"+rs.getInt("FailMessageId")+","+failMessageId+")",Statement.RETURN_GENERATED_KEYS);
+                        }
+
+                        /*****************stepname*********************/
+                        // Check if the stepname is already in the Db if yes we have to update if not then we have to insert
+                        // TODO :Change the values to the corresponding variables
+
+                        rs = stmt.executeQuery("select * from stepname where \"StepName\"='step'"); // Upper cases must be escaped with a backslash
+
+                        if (rs.next()) //if the stepname already exists
+                        {
+                            stepId=rs.getInt("StepId");
+                            /*****************step*********************/
+                            // TODO :Change the values to the corresponding variables and increment the total number of tests
+                            stmt.executeQuery("select * from step where \"StepId\"=" + stepId + " and \"Date\"='2008-11-11 13:23:44'"); // Upper cases must be escaped with a backslash
+                            if (!rs.next()) // if the step doesn't exist
+                            {
+                                stepId=stmt.executeUpdate("insert into step values(Default,'2008-11-11 13:23:44','OK','OK','OK'  )",Statement.RETURN_GENERATED_KEYS);
+                            }
+                            else // if the step exists
+                            {
+                                //do nothing
+                            }
+
+
+                        }
+                        else // if the stepname doesn't exist
+                        {
+                            // TODO :Change the values to the corresponding variables
+                            stepId=stmt.executeUpdate("insert into stepname values(default,'step'  )",Statement.RETURN_GENERATED_KEYS);
+                            stmt.executeUpdate("insert into step values("+stepId+",'2008-11-11 13:23:44','OK','OK','OK'  )");
+                        }
+                        /*****************Measures*********************/
+                        stmt.executeUpdate("insert into measures values("+productId+","+stepId+","+testNb+",'2008-11-11 13:23:44','OK','OK',)");
+
+                    }
+                    else//if the test already exists
+                    {}
                 }
+
                 else
                 {
                     // TODO :Change the values to the corresponding variables
-                    stmt.executeUpdate("insert into stepname values(default,'step'  )");
-                    stmt.executeUpdate("insert into step values(Default,'2008-11-11 13:23:44','OK','OK','OK'  )");
-
+                    productId=stmt.executeUpdate("insert into sn values(1,'sn')",Statement.RETURN_GENERATED_KEYS);
+                    // TODO :Change the values to the corresponding variables
+                    stmt.executeUpdate("insert into product values("+productId+"'pref',1,'true','true')");
+                    slec
                 }
+
+
 
 
                 conn.commit();
