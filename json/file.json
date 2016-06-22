@@ -2159,7 +2159,330 @@
   {
     "Status": "Passed",
     "FailMsg": "",
-    "Date": "27/02/2015 20:08:19",
+    "Date": "27/02/2015 20:06:05",
+    "SN": "KIT24GFU",
+    "Ref": "41699",
+    "BenchId": "BT010",
+    "Pc": "PTIZ569-01",
+    "Well": "1",
+    "Param": [
+      {
+        "Name": "Nomenclature",
+        "Value": "N"
+      }
+    ],
+    "Step": [
+      {
+        "Name": "Vérification cohérence SN",
+        "Status": "P"
+      },
+      {
+        "Name": "Présence varistance",
+        "Status": "P"
+      },
+      {
+        "Name": "Isolation Phase/Neutre",
+        "Value": 1105803.3,
+        "Min": 800000.0,
+        "Max": 1500000.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Isolation Phase/Masse",
+        "Value": 768287.577,
+        "Min": 500000.0,
+        "Max": 1300000.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Isolation 3V3/Masse",
+        "Value": 571.097775,
+        "Min": 500.0,
+        "Max": 650.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure 3V3 sous alimentation DC",
+        "Value": 3.328858,
+        "Min": 3.135,
+        "Max": 3.465,
+        "Status": "P"
+      },
+      {
+        "Name": "Programmation micro ST",
+        "Status": "P"
+      },
+      {
+        "Name": "Vérification version soft",
+        "Value": "0x9106",
+        "Min": "0x9106",
+        "Max": "0x9106",
+        "Status": "Passed"
+      },
+      {
+        "Name": "Mesure consommation DC repos",
+        "Value": 0.020185,
+        "Min": 0.0185,
+        "Max": 0.0225,
+        "Status": "P"
+      },
+      {
+        "Name": "Initialisation Eeprom",
+        "Status": "P"
+      },
+      {
+        "Name": "Ecriture trace testeur fail",
+        "Status": "P"
+      },
+      {
+        "Name": "Ecriture numéro de série",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure capteur Mgr aimant présent",
+        "Value": 0.003527800022079,
+        "Min": -0.1,
+        "Max": 0.1,
+        "Status": "P"
+      },
+      {
+        "Name": "Détection présence aimant par micro ST",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure capteur Mgr aimant absent",
+        "Value": 3.319031747749,
+        "Min": 3.135,
+        "Max": 3.465,
+        "Status": "P"
+      },
+      {
+        "Name": "Détection absence aimant par micro ST",
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement RF TX_Niveau",
+        "Value": 6.904728412025,
+        "Min": 5.0,
+        "Max": 10.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement RF TX_Frequence",
+        "Value": 868949197.189,
+        "Min": 8.68947E+8,
+        "Max": 8.68953E+8,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement RF TX_ParametreR",
+        "Value": 146.0,
+        "Min": 64.0,
+        "Max": 169.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement RF TX_ParametreP",
+        "Value": 101.0,
+        "Min": 0.0,
+        "Max": 255.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement RF TX_ParametreS",
+        "Value": 47.0,
+        "Min": 0.0,
+        "Max": 255.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement Vtune_Tension",
+        "Value": 0.1420943832256,
+        "Min": 0.03,
+        "Max": 0.3,
+        "Status": "P"
+      },
+      {
+        "Name": "Ajustement Vtune_Mot2Bits",
+        "Value": 0.0,
+        "Min": 0.0,
+        "Max": 3.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure RSSI",
+        "Value": 108.0,
+        "Min": 107.0,
+        "Max": 121.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Deconnexion SondeRF",
+        "Status": "P"
+      },
+      {
+        "Name": "Validation trame RF TX/RX",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure 7V",
+        "Value": 6.883977,
+        "Min": 6.6,
+        "Max": 7.3,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure 3V3",
+        "Value": 3.320616,
+        "Min": 3.135,
+        "Max": 3.465,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation repos",
+        "Value": 0.010538,
+        "Min": 0.009,
+        "Max": 0.013,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation repos",
+        "Value": 0.010538,
+        "Min": 0.009,
+        "Max": 0.013,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation photo transistor par mesures analogiques_Frequence",
+        "Value": 203.060819,
+        "Min": 185.0,
+        "Max": 215.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation photo transistor par mesures analogiques_RapportEtatBasSurPeriode",
+        "Value": 48.559665,
+        "Min": 33.0,
+        "Max": 70.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation photo transistor par mesures analogiques_RapportEtatIndetermineSurPeriode",
+        "Value": 9.299251,
+        "Min": 5.0,
+        "Max": 16.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation photo transistor par mesures analogiques_RapportEtatHautSurPeriode",
+        "Value": 42.141084,
+        "Min": 25.0,
+        "Max": 57.0,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation photo transistor par micro controleur",
+        "Value": "0x4",
+        "Min": "0x3",
+        "Max": "0x6",
+        "Status": "Passed"
+      },
+      {
+        "Name": "Envoi ordre 'monter volet' par commande Dut",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation moteur allumé en montée",
+        "Value": 0.542249,
+        "Min": 0.48,
+        "Max": 0.7,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation sens 'montée' par simulateur",
+        "Status": "P"
+      },
+      {
+        "Name": "Blocage moteur",
+        "Status": "P"
+      },
+      {
+        "Name": "Validation arrêt moteur par simulateur",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation moteur éteint en montée",
+        "Value": 0.010991,
+        "Min": 0.005,
+        "Max": 0.015,
+        "Status": "P"
+      },
+      {
+        "Name": "Validation état bloqué",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation confirmation état bloqué",
+        "Value": 0.011069,
+        "Min": 0.005,
+        "Max": 0.015,
+        "Status": "P"
+      },
+      {
+        "Name": "Synchronisation télécommande RF",
+        "Status": "P"
+      },
+      {
+        "Name": "Envoi ordre 'descente volet' par telecommande RF",
+        "Status": "P"
+      },
+      {
+        "Name": "Validation sens 'descente' par simulateur",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation moteur allumé en descente",
+        "Value": 0.519993,
+        "Min": 0.48,
+        "Max": 0.7,
+        "Status": "P"
+      },
+      {
+        "Name": "Envoi ordre arret par télécommande",
+        "Status": "P"
+      },
+      {
+        "Name": "Validation arrêt moteur par simulateur",
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation moteur éteint en descente",
+        "Value": 0.010881,
+        "Min": 0.005,
+        "Max": 0.015,
+        "Status": "P"
+      },
+      {
+        "Name": "Mesure consommation repos 2",
+        "Value": 0.010827,
+        "Min": 0.009,
+        "Max": 0.0115,
+        "Status": "P"
+      },
+      {
+        "Name": "Ecriture trace testeur Pass",
+        "Status": "P"
+      },
+      {
+        "Name": "Vérification cohérence SN",
+        "Status": "P"
+      }
+    ]
+  },
+  {
+    "Status": "Passed",
+    "FailMsg": "",
+    "Date": "27/02/2015 20:04:11",
     "SN": "KIT24GFS",
     "Ref": "41699",
     "BenchId": "BT010",
