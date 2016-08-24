@@ -25,7 +25,7 @@ public class Server {
         Statement stmt = null;
         ResultSet rs;
         // TODO : repertoire a modifier mail
-        File folder = new File("/home/sami/IdeaProjects/DBJava/json");
+        File folder = new File("/home/sami/IdeaProjects/Integration/json");
         File[] listOfFiles = folder.listFiles();
         String family = "family";
 
@@ -52,7 +52,7 @@ public class Server {
                         JSONArray jsonArray;
 
                         try {
-                            jsonArray = (JSONArray) parser.parse(new FileReader("/home/sami/IdeaProjects/DBJava/json/" + json));
+                            jsonArray = (JSONArray) parser.parse(new FileReader("/home/sami/IdeaProjects/Integration/json/" + json));
                         } catch (IOException e) {
                             e.printStackTrace();
                             return e.getMessage();
@@ -79,7 +79,6 @@ public class Server {
                                     productId = rs.getInt("productId");
                                     rs = stmt.executeQuery("select * from test where fk_productid=" + productId + "and date_part('epoch', timestamp '" + line.get("Date") + "' - date)=0");
 
-
                                     if (!rs.next()) //if the test doesn't exist
                                     {
 
@@ -93,7 +92,7 @@ public class Server {
 
                                         // Check if the fail message is already in the Db if yes we have to update if not then we have to insert
                                         failMessageId = -1;
-                                        if (!line.get("FailMsg").equals("")) {
+                                        if (!line.get("FailStep").equals("")) {
                                             rs = stmt.executeQuery("select * from failmessage where failmessage='" + ((String) (line.get("FailMsg"))).replace("'", "") + "'");
                                             if (!rs.next()) //if the message doesn't exist
                                             {
@@ -139,8 +138,6 @@ public class Server {
                                             seqKey = stmt.getGeneratedKeys();
                                             seqKey.next();
                                             benchId = seqKey.getInt(1);
-                                            System.out.println(benchId);
-
 
 
                                         } else {
@@ -168,56 +165,57 @@ public class Server {
 
 
                                         // Check if the stepname is already in the Db if yes we have to update if not then we have to insert
+                                        if (!line.get("Step").toString().equals("[{}]"))
+                                            for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
 
-                                        for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
+                                                JSONObject field = (JSONObject) step;
 
-                                            JSONObject field = (JSONObject) step;
+                                                rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
 
-                                            rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
-
-                                            if (rs.next()) //if the stepname already exists
-                                            {
-
-
-                                                /*****************stepname*********************/
-                                                // No need to add anything since the database already contains the corresponding stepname
-                                                stepId = rs.getInt("stepId");
-                                                /*****************step*********************/
-                                                rs = stmt.executeQuery("select * from step where fk_stepid=" + stepId);
-                                                if (!rs.next()) // if the step doesn't exist
+                                                if (rs.next()) //if the stepname already exists
                                                 {
-                                                    if (field.get("Date") != null) {
-                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
 
+
+                                                    /*****************stepname*********************/
+                                                    // No need to add anything since the database already contains the corresponding stepname
+                                                    stepId = rs.getInt("stepId");
+                                                    /*****************step*********************/
+                                                    rs = stmt.executeQuery("select * from step where fk_stepid=" + stepId);
+                                                    if (!line.get("Step").equals("[{}]"))
+                                                        if (!rs.next()) // if the step doesn't exist
+                                                        {
+                                                            if (!field.get("Date").equals("")) {
+                                                                stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+                                                            } else {
+                                                                stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+
+                                                            }
+                                                        }  // if the step exists
+
+
+                                                } else // if the stepname doesn't exist
+                                                {
+
+                                                    /*****************stepname*********************/
+                                                    stmt.executeUpdate("Insert into stepname values(Default,'" + field.get("Name") + "')", Statement.RETURN_GENERATED_KEYS);
+                                                    seqKey.next();
+                                                    seqKey = stmt.getGeneratedKeys();
+                                                    stepId = seqKey.getInt(1);
+                                                    /*****************Step*********************/
+                                                    // Check if the test is already in the Db if yes we have to update if not then we have to insert
+                                                    if (field.get("Date") != null) {
+                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )");
 
                                                     } else {
-                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
-
+                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )");
                                                     }
-                                                }  // if the step exists
-
-
-                                            } else // if the stepname doesn't exist
-                                            {
-
-                                                /*****************stepname*********************/
-                                                stmt.executeUpdate("Insert into stepname values(Default,'" + field.get("Name") + "')", Statement.RETURN_GENERATED_KEYS);
-                                                seqKey.next();
-                                                seqKey = stmt.getGeneratedKeys();
-                                                stepId = seqKey.getInt(1);
-                                                /*****************Step*********************/
-                                                // Check if the test is already in the Db if yes we have to update if not then we have to insert
-                                                if (field.get("Date") != null) {
-                                                    stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )");
-
-                                                } else {
-                                                    stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )");
                                                 }
+
+
                                             }
+                                        if (!line.get("Step").toString().equals("[{}]"))
 
-
-                                        }
-                                        for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
+                                            for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
 
                                             JSONObject field = (JSONObject) step;
                                             rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
@@ -228,15 +226,14 @@ public class Server {
                                             /*****************Measure*********************/
 
 
-                                            if (field.get("Date") != null)
                                                 stepDate = (String) line.get("Date");
-                                            else
-                                                stepDate = "current_timestamp";
+
 // TODO : Check the delay
                                             if (!rs.next())
-                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + "," + stepDate + ",1,'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + ", TIMESTAMP '" + stepDate + "' ," + (rs.getInt("measurenb") + 1) + ",'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+
                                             else {
-                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + "," + stepDate + "," + (rs.getInt("measurenb") + 1) + ",'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + ", TIMESTAMP '" + line.get("Date") + "' ," + (rs.getInt("measurenb") + 1) + ",'" + field.get("Status") + "','" + field.get("Value") + "',null)");
                                             }
                                         }
 
@@ -259,7 +256,7 @@ public class Server {
                                     /*****************failmessage*********************/
                                     // Check if the fail message is already in the Db if yes we have to update if not then we have to insert
                                     failMessageId = -1;
-                                    if (!line.get("FailMsg").equals("")) {
+                                    if (!line.get("FailStep").equals("")) {
                                         rs = stmt.executeQuery("select * from failmessage where failmessage='" + ((String) (line.get("FailMsg"))).replace("'", "") + "'");
                                         if (!rs.next()) //if the message doesn't exist
                                         {
@@ -297,7 +294,10 @@ public class Server {
                                     rs = stmt.executeQuery("select * from testbench where pc='" + line.get("Pc") + "'");
                                     if (!rs.next()) //if the parameter name doesn't exist
                                     {
+                                        if (!line.get("Well").equals(""))
                                         stmt.executeUpdate("insert into testbench values(Default,'" + line.get("Pc") + "'," + line.get("Well") + ")", Statement.RETURN_GENERATED_KEYS);
+                                        else
+                                            stmt.executeUpdate("insert into testbench values(Default,'" + line.get("Pc") + "'," + "NULL" + ")", Statement.RETURN_GENERATED_KEYS);
 
                                         seqKey = stmt.getGeneratedKeys();
                                         seqKey.next();
@@ -306,36 +306,41 @@ public class Server {
                                         benchId = rs.getInt("benchid");
                                     }
 
-                                    for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
+                                    if (!line.get("Step").toString().equals("[{}]"))
+                                        for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
 
-                                        JSONObject field = (JSONObject) step;
-                                        /*****************stepname*********************/
-                                        rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
+                                            JSONObject field = (JSONObject) step;
+                                            /*****************stepname*********************/
 
-                                        if (!rs.next()) //if the stepname doesn't exist
-                                        {
-                                            stmt.executeUpdate("Insert into stepname values(default,'" + ((String) (field.get("Name"))).replace("'", "") + "')", Statement.RETURN_GENERATED_KEYS);
+                                            rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
 
-                                            seqKey = stmt.getGeneratedKeys();
-                                            seqKey.next();
-
-                                        } else // if the stepname exists
-                                        {
-                                            stepId = rs.getInt("stepid");
-
-                                            /*****************step*********************/
-                                            rs = stmt.executeQuery("select * from step where fk_stepid='" + stepId + "' and date=" + field.get("Date") + "");
-
-                                            if (rs.next()) //if the step already exists
+                                            if (!rs.next()) //if the stepname doesn't exist
                                             {
+                                                stmt.executeUpdate("Insert into stepname values(default,'" + ((String) (field.get("Name"))).replace("'", "") + "')", Statement.RETURN_GENERATED_KEYS);
 
-                                                if (field.get("Date") != null)
-                                                    stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+                                                seqKey = stmt.getGeneratedKeys();
+                                                seqKey.next();
+
+                                            } else // if the stepname exists
+                                            {
+                                                stepId = rs.getInt("stepid");
+                                                //TODO : check if the step already exists
+                                                /*****************step*********************/
+                                                if (!field.get("Date").equals(""))
+                                                    rs = stmt.executeQuery("select * from step where fk_stepid='" + stepId + "' and date=" + field.get("Date") + "");
                                                 else
-                                                    stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+                                                    rs = stmt.executeQuery("select * from step where fk_stepid='" + stepId + "' and date=" + "TIMESTAMP '" + line.get("Date") + "'");
+
+                                                if (rs.next()) //if the step already exists
+                                                {
+
+                                                    if (field.get("Date") != null)
+                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'" + field.get("Date") + "','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+                                                    else
+                                                        stmt.executeUpdate("insert into step values(" + stepId + ",'1000-01-01 00:00:00','" + field.get("Min") + "','" + field.get("Max") + "','" + field.get("Unit") + "'  )", Statement.RETURN_GENERATED_KEYS);
+                                                }
                                             }
                                         }
-                                    }
                                     /*****************test*********************/
                                     // Check if the test contains a fail message
                                     if (failMessageId == -1) {
@@ -352,29 +357,27 @@ public class Server {
 
 
                                     }
+                                    if (!line.get("Step").toString().equals("[{}]"))
+                                        for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
 
-                                    for (Object step : (JSONArray) ((JSONObject) obj).get("Step")) {
-
-                                        JSONObject field = (JSONObject) step;
-                                        rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
-                                        rs.next();
-                                        stepId = rs.getInt("stepid");
-                                        rs = stmt.executeQuery("select MAX(measurenb) as measurenb from measure where fk_productid=" + productId + " and fk_stepid=" + stepId + " and fk_testid=" + testNb + "");
-                                        String stepDate;
-                                        /*****************Measure*********************/
+                                            JSONObject field = (JSONObject) step;
+                                            rs = stmt.executeQuery("select * from stepname where name='" + ((String) (field.get("Name"))).replace("'", "") + "'");
+                                            rs.next();
+                                            stepId = rs.getInt("stepid");
+                                            rs = stmt.executeQuery("select MAX(measurenb) as measurenb from measure where fk_productid=" + productId + " and fk_stepid=" + stepId + " and fk_testid=" + testNb + "");
+                                            String stepDate;
+                                            /*****************Measure*********************/
 
 
-                                        if (field.get("Date") != null)
-                                            stepDate = (String) line.get("Date");
-                                        else
-                                            stepDate = "current_timestamp";
+                                            if (field.get("Date") != null) stepDate = (String) field.get("Date");
+                                            else stepDate = (String) line.get("Date");
 
-                                        if (!rs.next())
-                                            stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + "," + stepDate + ",1,'" + field.get("Status") + "','" + field.get("Value") + "',null)");
-                                        else {
-                                            stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + "," + stepDate + "," + (rs.getInt("measurenb") + 1) + ",'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+                                            if (!rs.next())
+                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + ", TIMESTAMP '" + stepDate + ",' 1,'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+                                            else {
+                                                stmt.executeUpdate("insert into measure values(" + productId + "," + stepId + "," + testNb + ", TIMESTAMP '" + line.get("Date") + "' ," + (rs.getInt("measurenb") + 1) + ",'" + field.get("Status") + "','" + field.get("Value") + "',null)");
+                                            }
                                         }
-                                    }
 
                                 }
                             } catch (SQLException e) {
