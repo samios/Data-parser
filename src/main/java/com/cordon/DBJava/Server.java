@@ -43,7 +43,8 @@ public class Server {
             {
                 for(Object status : (JSONArray) ((JSONObject) obj).get("StatusList"))
                 {
-
+                    JSONObject statusField = (JSONObject) status;
+                    statusField.get("Passed");
                 }
             }
 
