@@ -39,6 +39,14 @@ public class Server {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
+            if(line.get("StatusList")!=null)
+            {
+                for(Object status : (JSONArray) ((JSONObject) obj).get("StatusList"))
+                {
+
+                }
+            }
+
             productId = rs.getInt("productId");
             rs = stmt.executeQuery("select * from test where fk_productid=" + productId + "and date_part('epoch', timestamp '" + line.get("Date") + "' - date)=0");
 
