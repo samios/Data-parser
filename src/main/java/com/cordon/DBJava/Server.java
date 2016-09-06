@@ -39,12 +39,30 @@ public class Server {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
-            if(line.get("StatusList")!=null)
-            {
-                for(Object status : (JSONArray) ((JSONObject) obj).get("StatusList"))
-                {
+
+            if (line.get("StatusList") != null) {
+                for (Object status : (JSONArray) ((JSONObject) obj).get("StatusList")) {
                     JSONObject statusField = (JSONObject) status;
-                    statusField.get("Passed");
+
+
+                    if (statusField.get("Passed") != null) {
+                        rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Passed") + "'");
+                        if (!rs.next()) //if the message doesn't exist
+                            stmt.executeUpdate("insert into statuslist values(P," + statusField.get("Passed"));
+                    } else if (statusField.get("Failed") != null) {
+                        rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Failed") + "'");
+                        if (!rs.next()) //if the message doesn't exist
+                            stmt.executeUpdate("insert into statuslist values(F," + statusField.get("Failed"));
+                    } else if (statusField.get("Error") != null) {
+                        rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Error") + "'");
+                        if (!rs.next()) //if the message doesn't exist
+                            stmt.executeUpdate("insert into statuslist values(E," + statusField.get("Error"));
+                    } else if (statusField.get("Skipped") != null) {
+                        rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Skipped") + "'");
+                        if (!rs.next()) //if the message doesn't exist
+                            stmt.executeUpdate("insert into statuslist values(S," + statusField.get("Skipped"));
+                    }
+
                 }
             }
 
@@ -205,6 +223,31 @@ public class Server {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
+        if (line.get("StatusList") != null) {
+            for (Object status : (JSONArray) ((JSONObject) obj).get("StatusList")) {
+                JSONObject statusField = (JSONObject) status;
+
+
+                if (statusField.get("Passed") != null) {
+                    rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Passed") + "'");
+                    if (!rs.next()) //if the message doesn't exist
+                        stmt.executeUpdate("insert into statuslist values(P," + statusField.get("Passed"));
+                } else if (statusField.get("Failed") != null) {
+                    rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Failed") + "'");
+                    if (!rs.next()) //if the message doesn't exist
+                        stmt.executeUpdate("insert into statuslist values(F," + statusField.get("Failed"));
+                } else if (statusField.get("Error") != null) {
+                    rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Error") + "'");
+                    if (!rs.next()) //if the message doesn't exist
+                        stmt.executeUpdate("insert into statuslist values(E," + statusField.get("Error"));
+                } else if (statusField.get("Skipped") != null) {
+                    rs = stmt.executeQuery("select * from statuslist where name='" + statusField.get("Skipped") + "'");
+                    if (!rs.next()) //if the message doesn't exist
+                        stmt.executeUpdate("insert into statuslist values(S," + statusField.get("Skipped"));
+                }
+
+            }
+        }
 
         productId = rs.getInt("productId");
         rs = stmt.executeQuery("select * from test where fk_productid=" + productId + "and date_part('epoch', timestamp '" + line.get("Date") + "' - date)=0");
