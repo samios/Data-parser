@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Integration:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Integration_jar</output-path>
+    <root id="archive" name="Integration.jar">
+      <element id="module-output" name="Integration" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/juniversalchardet.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/bluecatcode/junit/junit-4.10-extended/1.0.4/junit-4.10-extended-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.10/junit-4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/glassfish/javax.json/1.0.2/javax.json-1.0.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
