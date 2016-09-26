@@ -122,6 +122,7 @@ public class Server {
             rs = stmt.executeQuery("select * from testbench where pc='" + ((JSONObject) line.get("Tests")).get("Pc") + "'");
             if (!rs.next()) //if the parameter name doesn't exist
             {
+                System.out.println((JSONObject) line);
                 if (!((JSONObject) line.get("Tests")).get("Well").equals(""))
                     stmt.executeUpdate("insert into testbench values(Default,'" + ((JSONObject) line.get("Tests")).get("Pc") + "'," + ((JSONObject) line.get("Tests")).get("Well") + ")", Statement.RETURN_GENERATED_KEYS);
                 else
