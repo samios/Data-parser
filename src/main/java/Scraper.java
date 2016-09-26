@@ -463,7 +463,10 @@ public class Scraper {
                             testBuilder.add("Well", "");
                     else {
                         if(!Conf.getInFileWell().equals("null"))
-                        testBuilder.add("Well", line.get(Integer.parseInt(Conf.getInFileWell())));
+                            testBuilder.add("Well", line.get(Integer.parseInt(Conf.getInFileWell())));
+                        else
+                            testBuilder.add("Well", "");
+
                     }
 
                     // Adding the parameters to the builder
