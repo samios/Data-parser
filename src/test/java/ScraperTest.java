@@ -16,7 +16,6 @@ public class ScraperTest {
     public void getWrongDir() throws Exception {
         ArrayList<String> tmp = new ArrayList<String>();
         assertEquals(tmp, Scraper.getFileList("/home/sami/IdeaProjects/Bubendorff/test/Wrong"));
-
     }
 
     //If the directory is empty
@@ -31,8 +30,9 @@ public class ScraperTest {
     @Test
     public void getFileList() throws Exception {
         ArrayList<String> tmp = new ArrayList<String>();
-        tmp.add("RapportMCI4[1][27 02 2015].txt");
-        assertEquals(tmp, Scraper.getFileList("/home/sami/IdeaProjects/Integration/rapports"));
+        tmp.add("rapport.txt");
+        tmp.add("empty.txt");
+        assertEquals(tmp, Scraper.getFileList("/home/sami/IdeaProjects/Integration/src/test/files/list"));
 
     }
 
@@ -52,7 +52,7 @@ public class ScraperTest {
     @Test
     public void getAllContents() throws Exception {
         ArrayList<ArrayList<String>> actual;
-        actual = Scraper.getAllContents("/home/sami/IdeaProjects/Integration/rapports/RapportMCI4[1][27 02 2015].txt"); // Bubendorf file used for test
+        actual = Scraper.getAllContents("/home/sami/IdeaProjects/Integration/src/test/files/list/rapport.txt"); // Bubendorf file used for test
         ArrayList<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
         expected.add(new ArrayList<String>(Arrays.asList("Passed;;27/02/2015;16:12:59;Num Serie;KIT1MOJM;Reference;41699;Nomenclature;N;Categorie;BT010;StationId;PTIZ569-01;NumeroPuits;1;Vérification cohérence SN;Passed;Présence varistance;Passed;Isolation Phase/Neutre;1120645.28;800000;1500000;".split(";"))));
         assertEquals(expected,actual);
@@ -69,4 +69,3 @@ public class ScraperTest {
         assertEquals(actual, expected);
     }
 }
-
