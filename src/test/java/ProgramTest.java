@@ -56,24 +56,24 @@ public class ProgramTest {
 
     @Test
     public void get() throws Exception {
-        Program P=new Program("/home/sami/IdeaProjects/Bubendorff/test/input/RapportMCI4[1][27 02 2015].txt");
-        P.launchP("/home/sami/IdeaProjects/Bubendorff/test/input");
+        Program P=new Program("/home/sami/IdeaProjects/Integration/src/test/files/list/rapport.txt");
+        P.launchP("/home/sami/IdeaProjects/Integration/src/test/files/list");
         ArrayList<String> expected1=new ArrayList<String>();
-        expected1.add("Emptyfile.txt");
-        expected1.add("RapportMCI4[1][27 02 2015].txt");
+        expected1.add("rapport.txt");
+        expected1.add("empty.txt");
         ArrayList<ArrayList<String>> expected2=new ArrayList<ArrayList<String>>();
         expected2.add(new ArrayList<String>(Arrays.asList("Passed;;27/02/2015;16:12:59;Num Serie;KIT1MOJM;Reference;41699;Nomenclature;N;Categorie;BT010;StationId;PTIZ569-01;NumeroPuits;1;Vérification cohérence SN;Passed;Présence varistance;Passed;Isolation Phase/Neutre;1120645.28;800000;1500000;".split(";"))));
-        assertEquals("/home/sami/IdeaProjects/Bubendorff/test/input",P.getDir());
+        assertEquals("/home/sami/IdeaProjects/Integration/src/test/files/list",P.getDir());
         assertEquals(expected1,P.getFiles());
-        assertEquals(expected2,P.getContents());
+        assertEquals(expected2,Scraper.getAllContents("/home/sami/IdeaProjects/Integration/src/test/files/list/rapport.txt"));
     }
     @Test
     public void getEmptyDir() throws Exception {
-        Program P=new Program("/home/sami/IdeaProjects/Bubendorff/test/input/RapportMCI4[1][27 02 2015].txt");
-        P.launchP("/home/sami/IdeaProjects/Bubendorff/test/input/Emptydir");
+        Program P=new Program("/home/sami/IdeaProjects/Integration/src/test/files/test.txt");
+        P.launchP("/home/sami/IdeaProjects/Integration/src/test/files/emptydir");
         ArrayList<String> expected1=new ArrayList<String>();
         ArrayList<ArrayList<String>> expected2=new ArrayList<ArrayList<String>>();
-        assertEquals("/home/sami/IdeaProjects/Bubendorff/test/input/Emptydir",P.getDir());
+        assertEquals("/home/sami/IdeaProjects/Integration/src/test/files/emptydir",P.getDir());
         assertEquals(expected1,P.getFiles());
         assertEquals(expected2,P.getContents());
     }
