@@ -32,9 +32,9 @@ public class ParserTest {
         assertEquals(Conf.getProductData().getBenchTest().getStatus(),"0");
         assertEquals(Conf.getProductData().getBenchTest().getPc(),"8");
         assertEquals(Conf.getProductData().getBenchTest().getFailedMessage(),"null");
-        assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getName(),"14:Présence varistance");
+        assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getName(),"181:Présence varistance");
         assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getDate(),"null");
-        assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getStatus(),"15");
+        assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getStatus(),"182");
         assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getMax(),"null");
         assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getMin(),"null");
         assertEquals(Conf.getProductData().getBenchTest().getSteps().get(0).getUnit(),"null");
@@ -52,7 +52,7 @@ public class ParserTest {
     }
     @Test
     public void getWrongConf() throws Exception {
-        String conf = "/home/sami/IdeaProjects/Integration/test.conf";
+        String conf = "/home/sami/IdeaProjects/Integration/src/test/files/test.conf";
         Parser.parse(conf);
     }
 
