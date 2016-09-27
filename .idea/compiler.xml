@@ -22,11 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="Integration" />
+        <module name="Data-parser" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Integration" target="1.8" />
+      <module name="Data-parser" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

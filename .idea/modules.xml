@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Integration.iml" filepath="$PROJECT_DIR$/Integration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Data-parser.iml" filepath="$PROJECT_DIR$/Data-parser.iml" />
     </modules>
   </component>
 </project>

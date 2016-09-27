@@ -9,11 +9,10 @@ import static junit.framework.Assert.assertEquals;
 public class ParserTest {
     @Test
     public void getConf() throws Exception {
-        String conf = "/home/sami/IdeaProjects/Integration/src/test/files/test.conf";
+        String conf = "/home/sami/IdeaProjects/Data-parser/src/test/files/test.conf";
         Parser.parse(conf);
-        assertEquals(Conf.getArchiveDir(),"/home/sami/IdeaProjects/Integration/success");
-        assertEquals(Conf.getFailArchiveDir(),"/home/sami/IdeaProjects/Integration/fail");
-        assertEquals(Conf.getDirectory(),"/home/sami/IdeaProjects/Integration");
+        assertEquals(Conf.getArchiveDir(),"/home/sami/IdeaProjects/Data-parser/success");
+        assertEquals(Conf.getFailArchiveDir(),"/home/sami/IdeaProjects/Data-parser/fail");
         assertEquals(Conf.getPreviewFile(),"/home/sami/IdeaProjects/Wizard/RapportRI3[1][01 08 2014].txt");
         assertEquals(Conf.getColNumber(),"18");
         assertEquals(Conf.getLineFormat(),"Test");
@@ -52,7 +51,7 @@ public class ParserTest {
     }
     @Test
     public void getWrongConf() throws Exception {
-        String conf = "/home/sami/IdeaProjects/Integration/src/test/files/test.conf";
+        String conf = "/home/sami/IdeaProjects/Data-parser/src/test/files/test.conf";
         Parser.parse(conf);
     }
 

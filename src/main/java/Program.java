@@ -69,8 +69,9 @@ public class Program{
         this.setContents(Scraper.getAllContents(dir));
     }
 
-    public static void main(String [] args) {
-        Program main=new Program("/home/sami/IdeaProjects/Bubendorff/test/input");
+    public static void main(String [] args) throws IOException {
+        Conf.Init("data-parser.conf");
+        Program main=new Program(Conf.getImportDir());
     }
 
 

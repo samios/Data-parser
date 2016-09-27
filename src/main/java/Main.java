@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
@@ -22,13 +21,13 @@ public class Main implements Runnable {
         FileHandler fh = null;
         // This block configure the logger with handler and formatter
         try {
-            fh = new FileHandler("LogFile.log",true);
+            fh = new FileHandler(Conf.getLogName(),true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         SimpleFormatter formatter = new SimpleFormatter();
         fh.setFormatter(formatter);
-        ArrayList<String> confList = Scraper.getFileList("/home/vnc/Conversion/Conf");
+        ArrayList<String> confList = Scraper.getFileList(Conf.getParserConf());
         for(String c:confList) {
 
 
@@ -37,29 +36,32 @@ public class Main implements Runnable {
                     Conf.getLogger().info("Log Start for file : " + f);
                     Conf.getLogger().addHandler(fh);
                     try {
-                        Parser.parse("/home/vnc/Conversion/Conf/" + c);
+                        Parser.parse(Conf.getParserConf()+"/" + c);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     try {
-                        Scraper.toJsonTest(Conf.getDirectory() + "/" + f);
+                        Scraper.toJsonTest(Conf.getImportDir() + "/" + f);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
         }
-        System.out.println("thread"+k);
-
         Conf.getLogger().info("Log end");
+
     }
 
     public static void main(String[] args) throws IOException {
+
+        Conf.Init("data-parser.conf");
+
         ArrayList<String>[] fileList=new ArrayList[4];
-       fileList[0]=new ArrayList<String>();
-       fileList[1]=new ArrayList<String>();
-       fileList[2]=new ArrayList<String>();
-       fileList[3]=new ArrayList<String>();
-        ArrayList<String> all=Scraper.getFileList("/home/data/BT010-01/RI3");
+System.out.println(Conf.getLogger());
+        fileList[0]=new ArrayList<String>();
+        fileList[1]=new ArrayList<String>();
+        fileList[2]=new ArrayList<String>();
+        fileList[3]=new ArrayList<String>();
+        ArrayList<String> all=Scraper.getFileList(Conf.getImportDir());
         int i=0;
         for(String s:all)
         {
@@ -71,10 +73,10 @@ public class Main implements Runnable {
             {
                 fileList[1].add(s);
             }
-
+        i++;
         }
+
         new Thread(new Main(fileList[0],0)).start();
-        new Thread(new Main(fileList[1],1)).start();
 
         //Get the corresponding conf files
 

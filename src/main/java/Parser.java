@@ -24,46 +24,43 @@ public class Parser {
             if(l==1)
                 c.setFailArchiveDir(line.split("\t")[1]);
             if(l==2)
-                c.setDirectory(line.split("\t")[1]);
-            if(l==3)
                 c.setPreviewFile(line.split("\t")[1]);
-            if(l==4)
+            if(l==3)
                 c.setColNumber(line.split("\t")[1]);
-            if(l==5)
+            if(l==4)
                 c.setSeparator(line.split("\t")[1]);
-            if(l==6)
+            if(l==5)
                 c.setLineFormat(line.split("\t")[1]);
-            if(l==7)
+            if(l==6)
                 c.setStatusCol(line.split("\t")[1]);
-            if(l==8)
+            if(l==7)
                 c.setLineStart(line.split("\t")[1]);
-            if(l==9)
+            if(l==8)
                 c.setHeader(line.split("\t")[1]);
-            if(l==10)
+            if(l==9)
                 c.setHeaderLine(line.split("\t")[1]);
-            if(l==11)
+            if(l==10)
                 c.setStatusList(line.replace("StatusList\t","").split("\t"));
-            //TODO : Consider the pass array for l =8
-            if(l==12)
+            if(l==11)
                 p.setClient(line.split("\t")[1]);
-            if(l==13)
+            if(l==12)
                 c.setWell(line.split("\t")[1]);
 
-            if(l==14)
+            if(l==13)
                 p.setSerial(line.split("\t")[1]);
-            if(l==15)
+            if(l==14)
                 c.setProductFamily(line.split("\t")[1]);
-            if(l==16)
+            if(l==15)
                 p.getBenchTest().setDate(line.split("\t")[1]);
-            if(l==17)
+            if(l==16)
                 p.getBenchTest().setDuration(line.split("\t")[1]);
-            if(l==18)
+            if(l==17)
                 p.getBenchTest().setStatus(line.split("\t")[1]);
-            if(l==19)
+            if(l==18)
                 p.getBenchTest().setPc(line.split("\t")[1]);
-            if(l==20)
+            if(l==19)
                 p.getBenchTest().setFailedMessage(line.split("\t")[1]);
-            if(l==21) {
+            if(l==20) {
                 String s = "";
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
@@ -72,20 +69,20 @@ public class Parser {
 
             }
 
-            if(l==22) {
+            if(l==21) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++)
                     p.getBenchTest().getSteps().get(i-1).setDate(tab[i]);
 
 
             }
-            if(l==23) {
+            if(l==22) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setStatus(tab[i]);
                 }
             }
-            if(l==24) {
+            if(l==23) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setMax(tab[i]);
@@ -93,7 +90,7 @@ public class Parser {
                 }
 
             }
-            if(l==25) {
+            if(l==24) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setMin(tab[i]);
@@ -101,7 +98,7 @@ public class Parser {
                 }
 
             }
-            if(l==26) {
+            if(l==25) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setUnit(tab[i]);
@@ -109,50 +106,50 @@ public class Parser {
                 }
 
             }
-            if(l==27) {
+            if(l==26) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setValue(tab[i]);
 
                 }
             }
-            if(l==28) {
+            if(l==27) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().getSteps().get(i-1).setStepDuration(tab[i]);
                 }
             }
-            if(l==29) {
+            if(l==28) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.addParameter(tab[i]);
                 }
             }
-            if(l==30) {
+            if(l==29) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getParameters().get(i-1).setDate(tab[i]);
                 }
             }
-            if(l==31) {
+            if(l==30) {
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getParameters().get(i-1).setValue(tab[i]);
                 }
             }
-            if(l==32)
+            if(l==31)
                 c.setSubSeparator(line.split("\t")[1]);
-            if(l==33)
+            if(l==32)
                 c.setRegex(line.split("\t")[1]);
-            if(l==34)
+            if(l==33)
                 c.setStartKey(line.split("\t")[1]);
-            if(l==35)
+            if(l==34)
                 c.setEndKey(line.split("\t")[1]);
-            if(l==36)
+            if(l==35)
                 c.setStepLineTestStatus(line.split("\t")[1]);
-            if(l==37)
+            if(l==36)
                 c.setInFileWell(line.split("\t")[1]);
-            if(l==38)
+            if(l==37)
                 c.setConsideredStatus(line.split("\t")[1]);
             l++;
         }

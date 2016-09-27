@@ -1,9 +1,6 @@
 import javafx.scene.control.Alert;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -14,16 +11,41 @@ import java.util.logging.Logger;
  */
 public class Conf {
 
+
+    /**
+     * Folder where the conf files are loaded
+     */
+
+    private static String parserConf;
+
+    /**
+     * Log name
+     */
+
+    private static String logName;
+
+    /**
+     * Import dir for the files
+     */
+
+    private static String importDir;
+
+
+
     /**
      * logger for the programm log file
      */
 
-    private static Logger logger = Logger.getLogger("Integration Log");
+    private static Logger logger ;
+
+
     /**
-     * Default folder where the config file will be generated
+     * Folder of the jsons
      */
 
-    private static final String ConfigDir = "/home/sami/IdeaProjects/Wizard";
+    private static String jsonFolder ;
+
+
     /**
      * New conf or modify mode
      */
@@ -39,32 +61,28 @@ public class Conf {
      * Client Name
      */
 
-    private static String Client = "Bub";
+    private static String Client;
     /**
      * ProductFamily
      */
 
     private static String ProductFamily;
-    /**
-     * Import Directory
-     */
 
-    private static String Directory;
     /**
      * Directory where the integrated files will be archived
      */
 
-    private static String ArchiveDir = "/home/sami/IdeaProjects/Wizard";
+    private static String ArchiveDir ;
     /**
      * Directory where the failed integrated files will be archived
      */
 
-    private static String FailArchiveDir = "/home/sami/IdeaProjects/Wizard";
+    private static String FailArchiveDir;
     /**
      * Config file name
      */
 
-    private static String ConfigName = "test";
+    private static String ConfigName;
 
     /**
      * How each line will be parsed
@@ -101,7 +119,7 @@ public class Conf {
      * Status equivalence array
      */
 
-    private static String[] StatusList = {"Passed=Passed", "Failed=Failed", "Error=Error"};
+    private static String[] StatusList;
 
     /**
      * Column number of the whole test
@@ -126,13 +144,13 @@ public class Conf {
      * File to be used as preview in the wizard
      */
 
-    private static String PreviewFile = "/home/sami/IdeaProjects/Wizard/RapportRI3[1][01 08 2014].txt";
+    private static String PreviewFile;
 
     /**
      * Line separator
      */
 
-    private static String Separator = ";";
+    private static String Separator;
 
     /**
      * Line sub separator
@@ -215,6 +233,25 @@ public class Conf {
 
     private static String ConsideredStatus;
 
+
+    /**
+     *
+     */
+
+    public static void Init(String file) throws IOException {
+        String line = "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file),Parser.encoding(file)));
+        line = reader.readLine();
+        setParserConf(line.split("\t")[1]);
+        line = reader.readLine();
+        setJsonFolder(line.split("\t")[1]);
+        line = reader.readLine();
+        setImportDir(line.split("\t")[1]);
+        line = reader.readLine();
+        setLogName(line.split("\t")[1]);
+        setLogger(Logger.getLogger(getLogName()));
+    }
+
     /**
      * Constructor
      */
@@ -230,11 +267,10 @@ public class Conf {
      * Constructor
      */
 
-    public Conf(String mode, String client, String directory, String archiveDir, String failArchiveDir, String configDir, String lineParse, String lineStart, String[] status) {
+    public Conf(String mode, String client, String archiveDir, String failArchiveDir, String configDir, String lineParse, String lineStart, String[] status) {
 
         Mode = mode;
         Client = client;
-        Directory = directory;
         ArchiveDir = archiveDir;
         FailArchiveDir = failArchiveDir;
         ConfigName = configDir;
@@ -243,6 +279,70 @@ public class Conf {
         StatusList = status;
         VisitedMode=false;
         VisitedTestBis=false;
+    }
+
+    /**
+     * Getter
+     */
+
+    public static String getParserConf() {
+        return parserConf;
+    }
+
+    /**
+     * Setter
+     */
+
+    public static void setParserConf(String parserConf) {
+        Conf.parserConf = parserConf;
+    }
+
+    /**
+     * Getter
+     */
+
+    public static String getLogName() {
+        return logName;
+    }
+
+    /**
+     * Setter
+     */
+
+    public static void setLogName(String logName) {
+        Conf.logName = logName;
+    }
+
+    /**
+     * Getter
+     */
+
+    public static String getImportDir() {
+        return importDir;
+    }
+
+    /**
+     * Setter
+     */
+
+    public static void setImportDir(String importDir) {
+        Conf.importDir = importDir;
+    }
+
+    /**
+     * Getter
+     */
+
+    public static String getJsonFolder() {
+        return jsonFolder;
+    }
+
+    /**
+     * Setter
+     */
+
+    public static void setJsonFolder(String jsonFolder) {
+        Conf.jsonFolder = jsonFolder;
     }
 
     /**
@@ -314,22 +414,6 @@ public class Conf {
             ProductFamily = productFamily;
     }
 
-
-    /**
-     * Getter
-     */
-
-    public static String getDirectory() {
-        return Directory;
-    }
-
-    /**
-     * Setter
-     */
-
-    public static void setDirectory(String directory) {
-        Directory = directory;
-    }
 
     /**
      * Getter
@@ -847,49 +931,48 @@ public class Conf {
         }
         setArchiveDir(tmp.get(0));
         setFailArchiveDir(tmp.get(1));
-        setDirectory(tmp.get(2));
-        setColNumber(tmp.get(4));
-        setSeparator(tmp.get(5));
-        setLineFormat(tmp.get(6));
-        setLineStart(tmp.get(7));
-        setHeader(tmp.get(9));
-        setHeaderLine(tmp.get(10));
+        setColNumber(tmp.get(3));
+        setSeparator(tmp.get(4));
+        setLineFormat(tmp.get(5));
+        setLineStart(tmp.get(6));
+        setHeader(tmp.get(8));
+        setHeaderLine(tmp.get(9));
 
-        int l = tmp.get(11).split("\t").length;
+        int l = tmp.get(10).split("\t").length;
 
 
         String status[] = new String[l];
         for (int i = 0; i < l; i++) {
-            status[i] = tmp.get(11).split("\t")[i];
+            status[i] = tmp.get(10).split("\t")[i];
 
         }
 
         setStatusList(status);
-        setClient(tmp.get(12));
-        setWell(tmp.get(13));
-        setProductFamily(tmp.get(15));
+        setClient(tmp.get(11));
+        setWell(tmp.get(12));
+        setProductFamily(tmp.get(14));
 
         ArrayList<Step> steps = new ArrayList<Step>();
 
         int i = 0;
-        for (String s : tmp.get(21).split("\t")) {
+        for (String s : tmp.get(20).split("\t")) {
 
-            steps.add(new Step(tmp.get(21), tmp.get(22), tmp.get(23), tmp.get(24), tmp.get(25), tmp.get(26), tmp.get(27),tmp.get(28)));
+            steps.add(new Step(tmp.get(20), tmp.get(21), tmp.get(22), tmp.get(23), tmp.get(24), tmp.get(25), tmp.get(26),tmp.get(27)));
         }
-        Test test = new Test(steps, tmp.get(16), tmp.get(17), tmp.get(18), tmp.get(19),tmp.get(20));
+        Test test = new Test(steps, tmp.get(15), tmp.get(16), tmp.get(17), tmp.get(18),tmp.get(19));
         ArrayList<Parameter> params = new ArrayList<Parameter>();
-        for (String s : tmp.get(29).split("\t")) {
-            params.add(new Parameter(tmp.get(29), tmp.get(30), tmp.get(31)));
+        for (String s : tmp.get(28).split("\t")) {
+            params.add(new Parameter(tmp.get(28), tmp.get(29), tmp.get(30)));
         }
 
-        setSubSeparator(tmp.get(32));
-        setRegex(tmp.get(33));
-        setStartKey(tmp.get(34));
-        setEndKey(tmp.get(35));
-        setStepLineTestStatus(tmp.get(36));
-        setInFileWell(tmp.get(37));
+        setSubSeparator(tmp.get(31));
+        setRegex(tmp.get(32));
+        setStartKey(tmp.get(33));
+        setEndKey(tmp.get(34));
+        setStepLineTestStatus(tmp.get(35));
+        setInFileWell(tmp.get(36));
         setConsideredStatus(tmp.get(37));
-        setProductData(new Product(tmp.get(14), test, params));
+        setProductData(new Product(tmp.get(13), test, params));
         br.close();
 
     }
