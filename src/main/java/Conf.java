@@ -1,6 +1,9 @@
 import javafx.scene.control.Alert;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -30,6 +33,12 @@ public class Conf {
 
     private static String importDir;
 
+
+    /**
+     * Number of threads to process the files
+     */
+
+    private static String nThreads;
 
 
     /**
@@ -250,6 +259,8 @@ public class Conf {
         line = reader.readLine();
         setLogName(line.split("\t")[1]);
         setLogger(Logger.getLogger(getLogName()));
+        line = reader.readLine();
+        setnThreads(line.split("\t")[1]);
     }
 
     /**
@@ -349,6 +360,22 @@ public class Conf {
      * Getter
      */
 
+    public static String getnThreads() {
+        return nThreads;
+    }
+
+    /**
+     * Setter
+     */
+
+    public static void setnThreads(String nThreads) {
+        Conf.nThreads = nThreads;
+    }
+
+    /**
+     * Getter
+     */
+
     public static String getMode() {
         return Mode;
     }
@@ -413,7 +440,6 @@ public class Conf {
 
             ProductFamily = productFamily;
     }
-
 
     /**
      * Getter
@@ -673,7 +699,7 @@ public class Conf {
     }
 
     /**
-     * Setter
+     * Getter
      */
 
     public static Boolean getVisitedTestBis() {
@@ -681,7 +707,7 @@ public class Conf {
     }
 
     /**
-     * Getter
+     * Setter
      */
 
     public static void setVisitedTestBis(Boolean visited3) {
@@ -917,9 +943,7 @@ public class Conf {
     }
 
     /**
-     * Checks if the file is a valid configuration file
-     *
-     * @return boolean true if success false if failed to create
+     * Loads the conf data
      */
 
     public void loadConf(String file) throws IOException {
@@ -929,7 +953,7 @@ public class Conf {
         while ((line = br.readLine()) != null) {
             tmp.add(line.substring(line.indexOf("\t") + 1, line.length()));
         }
-        setArchiveDir(tmp.get(0));
+        setArchiveDir("");
         setFailArchiveDir(tmp.get(1));
         setColNumber(tmp.get(3));
         setSeparator(tmp.get(4));
@@ -944,7 +968,6 @@ public class Conf {
         String status[] = new String[l];
         for (int i = 0; i < l; i++) {
             status[i] = tmp.get(10).split("\t")[i];
-
         }
 
         setStatusList(status);
@@ -974,6 +997,32 @@ public class Conf {
         setConsideredStatus(tmp.get(37));
         setProductData(new Product(tmp.get(13), test, params));
         br.close();
+
+    }
+    public static void reset()
+    {
+        setArchiveDir("");
+        setFailArchiveDir("");
+        setColNumber("");
+        setSeparator("");
+        setLineFormat("");
+        setLineStart("");
+        setHeader("");
+        setHeaderLine("");
+        setStatusList(null);
+        setClient("");
+        setWell("");
+        setProductFamily("");
+        setSubSeparator("");
+        setRegex("");
+        setStartKey("");
+        setEndKey("");
+        setStepLineTestStatus("");
+        setInFileWell("");
+        setConsideredStatus("");
+        ArrayList<Step> st= new ArrayList<Step>();
+        Product tmp=new Product();
+        setProductData(tmp);
 
     }
 }

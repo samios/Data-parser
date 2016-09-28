@@ -9,9 +9,11 @@ import java.io.InputStreamReader;
  * Created by sami on 20/07/16.
  */
 public class Parser {
+        private static Conf c= new Conf();
+
+
     public static Conf parse(String conf) throws IOException {
         Product p = new Product();
-        Conf c= new Conf();
         String line = "";
         int l = 0;
 
@@ -70,6 +72,7 @@ public class Parser {
             }
 
             if(l==21) {
+
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++)
                     p.getBenchTest().getSteps().get(i-1).setDate(tab[i]);

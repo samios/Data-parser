@@ -175,6 +175,7 @@ public class Scraper {
     static void toJsonTest(String filepath) throws IOException {
 
 
+        //Check if json already exists
         File fj = new File(jsonFolder+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0] + ".json");
         if(fj.exists()) {
             Conf.getLogger().info(filepath + " already exists in Json folder ");
@@ -283,7 +284,9 @@ public class Scraper {
                     j++;
                      if (line.get(Integer.parseInt(p.getBenchTest().getStatus())).equals(passed) && !(line.size() == Integer.parseInt(Conf.getColNumber()))) {// Json creation/ data extraction failed
                         Conf.getLogger().info(filepath + " failed : Nombre de colonnes pour un test passed different de celui indiqué dans le fichier de conf");
-                        zip(filepath,Conf.getFailArchiveDir()+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0]+".zip");
+                         zip(filepath,Conf.getFailArchiveDir()+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0]+".zip");
+                         File del=new File(filepath);
+                         del.delete(); // delete the files
                         return;
                     } else {
                         testBuilder.add("SN", line.get(Integer.parseInt(p.getSerial())));
@@ -516,7 +519,6 @@ public class Scraper {
 
 
                     }
-
                 }
 
                 // Json creation/ data extraction failed
@@ -525,6 +527,8 @@ public class Scraper {
                     Conf.getLogger().info(filepath + " Erreur sur la ligne "+j+". Probleme de configuration d'une des lignes.");
                     Conf.getLogger().info(filepath + " failed : ");
                     zip(filepath,Conf.getFailArchiveDir()+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0]+".zip");
+                    File del=new File(filepath);
+                    del.delete(); // delete the file
                     return;
                 }
                 //On ajoute le builder du test au builder principal
@@ -536,14 +540,9 @@ public class Scraper {
 
         //write to file
 
-            OutputStream os = new FileOutputStream(jsonFolder + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".json"); //TODO : Check if file exists
+            OutputStream os = new FileOutputStream(jsonFolder + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".json");
             JsonArray listObject = listBuilder.build();
 
-        /*
-        * !!!!
-        * !!!! TODO : Specify whether the json file should be pretty printed or not
-        * !!!!
-        * */
 
             Map<String, Boolean> config = new HashMap<>();
             config.put(JsonGenerator.PRETTY_PRINTING, true);
@@ -556,6 +555,8 @@ public class Scraper {
             // Json creation/ data extraction succeeded
 
             zip(filepath, Conf.getArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+            File del=new File(filepath);
+            del.delete(); // delete the files
         }
     }
 

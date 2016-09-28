@@ -179,9 +179,8 @@ public class Product {
 
 
 
-    public Step getLastStep()
-    {
-        ArrayList<Step> steps=getBenchTest().getSteps();
+    public Step getLastStep() {
+        ArrayList<Step> steps = getBenchTest().getSteps();
         return steps.get(steps.size());
     }
 }
