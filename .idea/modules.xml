@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Data-parser.iml" filepath="$PROJECT_DIR$/Data-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DBJava.iml" filepath="$PROJECT_DIR$/DBJava.iml" />
     </modules>
   </component>
 </project>
