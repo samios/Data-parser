@@ -1,3 +1,4 @@
+package com.cordon;
 import javafx.scene.control.Alert;
 
 import java.io.BufferedReader;
@@ -32,6 +33,12 @@ public class Conf {
      */
 
     private static String importDir;
+
+    /**
+     * Folder for the non processed files
+     */
+
+    private static String nonProcessedDir;
 
 
     /**
@@ -244,18 +251,20 @@ public class Conf {
 
 
     /**
-     *
+     *  Loads the program configuration file
      */
 
-    public static void Init(String file) throws IOException {
-        String line = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file),Parser.encoding(file)));
+    public static void Init() throws IOException {
+        String line;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("data-parser.conf"),Parser.encoding("data-parser.conf")));
         line = reader.readLine();
         setParserConf(line.split("\t")[1]);
         line = reader.readLine();
         setJsonFolder(line.split("\t")[1]);
         line = reader.readLine();
         setImportDir(line.split("\t")[1]);
+        line = reader.readLine();
+        setNonProcessedDir(line.split("\t")[1]);
         line = reader.readLine();
         setLogName(line.split("\t")[1]);
         setLogger(Logger.getLogger(getLogName()));
@@ -304,7 +313,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setParserConf(String parserConf) {
+    private static void setParserConf(String parserConf) {
         Conf.parserConf = parserConf;
     }
 
@@ -320,7 +329,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setLogName(String logName) {
+    private static void setLogName(String logName) {
         Conf.logName = logName;
     }
 
@@ -336,7 +345,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setImportDir(String importDir) {
+    private static void setImportDir(String importDir) {
         Conf.importDir = importDir;
     }
 
@@ -352,8 +361,24 @@ public class Conf {
      * Setter
      */
 
-    public static void setJsonFolder(String jsonFolder) {
+    private static void setJsonFolder(String jsonFolder) {
         Conf.jsonFolder = jsonFolder;
+    }
+
+    /**
+     * Getter
+     */
+
+    public static String getNonProcessedDir() {
+        return nonProcessedDir;
+    }
+
+    /**
+     * Setter
+     */
+
+    private static void setNonProcessedDir(String nonProcessedDir) {
+        Conf.nonProcessedDir = nonProcessedDir;
     }
 
     /**
@@ -368,7 +393,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setnThreads(String nThreads) {
+    private static void setnThreads(String nThreads) {
         Conf.nThreads = nThreads;
     }
 
@@ -400,8 +425,8 @@ public class Conf {
      * Setter
      */
 
-    public static void setConfigFile(String configFile) {
-        configFile = configFile;
+    public static void setConfigFile(String configfile) {
+        configFile = configfile;
     }
 
     /**
@@ -417,7 +442,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setClient(String client) {
+    private static void setClient(String client) {
         Client = client;
     }
 
@@ -889,7 +914,7 @@ public class Conf {
      * Setter
      */
 
-    public static void setLogger(Logger logger) {
+    private static void setLogger(Logger logger) {
         Conf.logger = logger;
     }
 
@@ -912,14 +937,15 @@ public class Conf {
 
     /**
      * Checks if the file is a valid configuration file
+     * @param file the conf file to check
      * @return boolean true if success false if failed to create
      */
 
     public boolean checkConf(String file) throws IOException {
         BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream("src/main/resources/Test.conf"),Parser.encoding("src/main/resources/Test.conf")));
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),Parser.encoding(file)))) {
-            String line = "";
-            String line2 = "";
+            String line;
+            String line2;
             while ((line2 = br.readLine()) != null && (line = br2.readLine()) != null) {
 
                 if (!line.split("\t")[0].equals(line2.split("\t")[0])) {
@@ -944,12 +970,13 @@ public class Conf {
 
     /**
      * Loads the conf data
+     * @param file the conf file name to load
      */
 
     public void loadConf(String file) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),Parser.encoding(file)));
-        String line = "";
-        ArrayList<String> tmp = new ArrayList();
+        String line;
+        ArrayList<String> tmp = new ArrayList<String>();
         while ((line = br.readLine()) != null) {
             tmp.add(line.substring(line.indexOf("\t") + 1, line.length()));
         }
@@ -977,7 +1004,6 @@ public class Conf {
 
         ArrayList<Step> steps = new ArrayList<Step>();
 
-        int i = 0;
         for (String s : tmp.get(20).split("\t")) {
 
             steps.add(new Step(tmp.get(20), tmp.get(21), tmp.get(22), tmp.get(23), tmp.get(24), tmp.get(25), tmp.get(26),tmp.get(27)));
@@ -999,6 +1025,9 @@ public class Conf {
         br.close();
 
     }
+    /**
+     * resets the conf structure
+     */
     public static void reset()
     {
         setArchiveDir("");
@@ -1020,7 +1049,6 @@ public class Conf {
         setStepLineTestStatus("");
         setInFileWell("");
         setConsideredStatus("");
-        ArrayList<Step> st= new ArrayList<Step>();
         Product tmp=new Product();
         setProductData(tmp);
 

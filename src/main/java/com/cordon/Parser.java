@@ -1,3 +1,5 @@
+package com.cordon;
+
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.BufferedReader;
@@ -12,9 +14,13 @@ public class Parser {
         private static Conf c= new Conf();
 
 
-    public static Conf parse(String conf) throws IOException {
+    /**
+     * @param conf the conf file to be parsed
+     * @throws IOException
+     */
+    public static void parse(String conf) throws IOException {
         Product p = new Product();
-        String line = "";
+        String line;
         int l = 0;
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(conf),encoding(conf)));
@@ -22,36 +28,36 @@ public class Parser {
         {
 
             if(l==0)
-                c.setArchiveDir(line.split("\t")[1]);
+                Conf.setArchiveDir(line.split("\t")[1]);
             if(l==1)
-                c.setFailArchiveDir(line.split("\t")[1]);
+                Conf.setFailArchiveDir(line.split("\t")[1]);
             if(l==2)
-                c.setPreviewFile(line.split("\t")[1]);
+                Conf.setPreviewFile(line.split("\t")[1]);
             if(l==3)
-                c.setColNumber(line.split("\t")[1]);
+                Conf.setColNumber(line.split("\t")[1]);
             if(l==4)
-                c.setSeparator(line.split("\t")[1]);
+                Conf.setSeparator(line.split("\t")[1]);
             if(l==5)
-                c.setLineFormat(line.split("\t")[1]);
+                Conf.setLineFormat(line.split("\t")[1]);
             if(l==6)
-                c.setStatusCol(line.split("\t")[1]);
+                Conf.setStatusCol(line.split("\t")[1]);
             if(l==7)
-                c.setLineStart(line.split("\t")[1]);
+                Conf.setLineStart(line.split("\t")[1]);
             if(l==8)
-                c.setHeader(line.split("\t")[1]);
+                Conf.setHeader(line.split("\t")[1]);
             if(l==9)
-                c.setHeaderLine(line.split("\t")[1]);
+                Conf.setHeaderLine(line.split("\t")[1]);
             if(l==10)
-                c.setStatusList(line.replace("StatusList\t","").split("\t"));
+                Conf.setStatusList(line.replace("StatusList\t","").split("\t"));
             if(l==11)
                 p.setClient(line.split("\t")[1]);
             if(l==12)
-                c.setWell(line.split("\t")[1]);
+                Conf.setWell(line.split("\t")[1]);
 
             if(l==13)
                 p.setSerial(line.split("\t")[1]);
             if(l==14)
-                c.setProductFamily(line.split("\t")[1]);
+                Conf.setProductFamily(line.split("\t")[1]);
             if(l==15)
                 p.getBenchTest().setDate(line.split("\t")[1]);
             if(l==16)
@@ -63,7 +69,6 @@ public class Parser {
             if(l==19)
                 p.getBenchTest().setFailedMessage(line.split("\t")[1]);
             if(l==20) {
-                String s = "";
                 String[] tab=line.split("\t");
                 for (int i = 1; i <tab.length ; i++) {
                     p.getBenchTest().addStep(tab[i]);
@@ -141,23 +146,22 @@ public class Parser {
                 }
             }
             if(l==31)
-                c.setSubSeparator(line.split("\t")[1]);
+                Conf.setSubSeparator(line.split("\t")[1]);
             if(l==32)
-                c.setRegex(line.split("\t")[1]);
+                Conf.setRegex(line.split("\t")[1]);
             if(l==33)
-                c.setStartKey(line.split("\t")[1]);
+                Conf.setStartKey(line.split("\t")[1]);
             if(l==34)
-                c.setEndKey(line.split("\t")[1]);
+                Conf.setEndKey(line.split("\t")[1]);
             if(l==35)
-                c.setStepLineTestStatus(line.split("\t")[1]);
+                Conf.setStepLineTestStatus(line.split("\t")[1]);
             if(l==36)
-                c.setInFileWell(line.split("\t")[1]);
+                Conf.setInFileWell(line.split("\t")[1]);
             if(l==37)
-                c.setConsideredStatus(line.split("\t")[1]);
+                Conf.setConsideredStatus(line.split("\t")[1]);
             l++;
         }
-        c.setProductData(p);
-        return c;
+        Conf.setProductData(p);
     }
     /**
      * @param path the file path

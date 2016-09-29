@@ -1,3 +1,5 @@
+package com.cordon;
+
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
 import javax.swing.*;
@@ -22,13 +24,16 @@ public class Scraper {
 
 
     static final int BUFFER = 2048;
-    public static int counter = 0;
-    public static String jsonFolder=Conf.getJsonFolder();
+    private static int counter = 0;
+    private static final String jsonFolder=Conf.getJsonFolder();
 
     /**
-     *
+     * get the shortened status equivalent for the statuslist
+     * @param status the status to compare
+     * @param statusList the array containing the status
+     * @return the status shortened
      */
-    public static String statusDb(String status, String[] statusList) {
+    private static String statusDb(String status, String[] statusList) {
         String tmp = "";
         for (String s : statusList) {
             if (s.split("=")[0].equals(status)) {
@@ -72,7 +77,7 @@ public class Scraper {
      * @param filepath File path
      * @return a String representing the header
      */
-    public static String scrapHeader(String filepath) throws IOException {
+    private static String scrapHeader(String filepath) throws IOException {
         int l = 0;
         String line = "";
 
@@ -104,12 +109,12 @@ public class Scraper {
     }
 
     /**
-     * Returns the header line
+     * zips the file in the filepath
      *
      * @param filepath File path
-     * @return a String representing the header
+     * @param destZip the destination name for the zipped file
      */
-    public static void zip(String filepath, String destZip) throws IOException {
+    private static void zip(String filepath, String destZip) {
         byte[] buffer = new byte[1024];
 
         try{
@@ -167,9 +172,7 @@ public class Scraper {
 
     /**
      * Returns the content of all files in parameters
-     *
      * @param filepath File path
-     * @return voidFailed
      */
 
     static void toJsonTest(String filepath) throws IOException {
@@ -247,17 +250,15 @@ public class Scraper {
 
             for (ArrayList<String> line : content) {
                 boolean b=false;
+                //check if we should consider only some status
                 if(!Conf.getConsideredStatus().equals("null"))
                 {
+                    //check if the line contains a status we want or not and write it to non processed folder
                     if(!Conf.getConsideredStatus().contains(line.get(Integer.parseInt(p.getBenchTest().getStatus()))))
                     {
                             b = true;
-
                             if(f==null) {
-
-                                //TODO:see again for the fail files
-                                f = new File(Conf.getImportDir()+ "/Passed/" + filepath.split("/")[filepath.split("/").length - 1] );
-
+                                f = new File(Conf.getNonProcessedDir()+"Partiel-"+filepath.split("/")[filepath.split("/").length - 1] );
                                 writer = new BufferedWriter(new FileWriter(f));
                                 if (Conf.getHeader().equals("Yes")) {
                                     writer.write(header);
@@ -267,7 +268,7 @@ public class Scraper {
 
 
                             for(String c:line) {
-                                if(f.toString().equals("/home/data/BT010-01/MI2/Passed/MI2-Report_MI2_20151109.csv"))
+                                if(f.toString().equals(Conf.getNonProcessedDir()+"Partiel-"+filepath.split("/")[filepath.split("/").length - 1]))
                                 writer.write(c);
                                 writer.write(";");
                             }
@@ -283,12 +284,21 @@ public class Scraper {
                     //If it is the file is corrupted or invalid
                     j++;
                      if (line.get(Integer.parseInt(p.getBenchTest().getStatus())).equals(passed) && !(line.size() == Integer.parseInt(Conf.getColNumber()))) {// Json creation/ data extraction failed
-                        Conf.getLogger().info(filepath + " failed : Nombre de colonnes pour un test passed different de celui indiqué dans le fichier de conf");
-                         zip(filepath,Conf.getFailArchiveDir()+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0]+".zip");
-                         File del=new File(filepath);
-                         del.delete(); // delete the files
-                        return;
-                    } else {
+                         File tmp=new File(filepath);
+                         if(tmp.exists()) {
+                             Conf.getLogger().info(filepath + " failed : Nombre de colonnes pour un test passed different de celui indiqué dans le fichier de conf");
+                             try {
+                                 zip(filepath, Conf.getFailArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+                             }
+                             catch(Exception e)
+                             {
+                                 Conf.getLogger().info(filepath + " zip failed : Archivage impossible le fichier n'a pas été supprimé.");
+                             }
+                             File del = new File(filepath);
+                             del.delete(); // delete the files
+                         }
+                         return;
+                     } else {
                         testBuilder.add("SN", line.get(Integer.parseInt(p.getSerial())));
                         //adds the file path to the json for further informations
 
@@ -306,8 +316,14 @@ public class Scraper {
                                             } else
                                                 break;
                                         } else if (!line.get(Integer.parseInt(step.getName().split(":")[0])).equals(step.getName().split(":")[1])) {
-                                            Conf.getLogger().info(filepath + " failed : Une des colonnes renseignée pour le stepname ne correspond pas");
+                                            if(!Conf.getConsideredStatus().equals("null"))
+                                                Conf.getLogger().info(filepath + " failed : Le fichier est supposé être traité par statut et l'une des colonnes renseignée pour le stepname ne correspond pas risque de doublon.");
+                                            else
+                                                Conf.getLogger().info(filepath + " failed : Une des colonnes renseignée pour le stepname ne correspond pas");
+
                                             zip(filepath, Conf.getFailArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+                                            File del = new File(filepath);
+                                            del.delete(); // delete the file
                                             return;
                                         } else
                                             stepBuilder.add("Name", line.get(Integer.parseInt(step.getName().split(":")[0])));
@@ -523,12 +539,23 @@ public class Scraper {
 
                 // Json creation/ data extraction failed
                 catch (Exception e) {
-                    e.printStackTrace();
-                    Conf.getLogger().info(filepath + " Erreur sur la ligne "+j+". Probleme de configuration d'une des lignes.");
-                    Conf.getLogger().info(filepath + " failed : ");
-                    zip(filepath,Conf.getFailArchiveDir()+"/"+filepath.split("/")[filepath.split("/").length-1].split("\\.")[0]+".zip");
-                    File del=new File(filepath);
-                    del.delete(); // delete the file
+                    File tmp=new File(filepath);
+                    if(tmp.exists()) {
+                        e.printStackTrace();
+                        Conf.getLogger().info(filepath + " Erreur sur la ligne " + j + ". Probleme de configuration d'une des lignes.");
+                        Conf.getLogger().info(filepath + " failed : ");
+
+                        try {
+                            zip(filepath, Conf.getFailArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+                        }
+                        catch(Exception e1)
+                        {
+                            Conf.getLogger().info(filepath + " zip failed : Archivage impossible le fichier n'a pas été supprimé.");
+                        }
+
+                        File del = new File(filepath);
+                        del.delete(); // delete the file
+                    }
                     return;
                 }
                 //On ajoute le builder du test au builder principal
@@ -539,11 +566,12 @@ public class Scraper {
                 writer.close();
 
         //write to file
-
-            OutputStream os = new FileOutputStream(jsonFolder + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".json");
+            OutputStream os;
+            if(!Conf.getConsideredStatus().equals("null"))
+            os = new FileOutputStream(jsonFolder + "/Partial"+Conf.getConsideredStatus()+"-"+ filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".json");
+            else
+            os = new FileOutputStream(jsonFolder + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".json");
             JsonArray listObject = listBuilder.build();
-
-
             Map<String, Boolean> config = new HashMap<>();
             config.put(JsonGenerator.PRETTY_PRINTING, true);
             JsonWriterFactory jwf = Json.createWriterFactory(config);
@@ -553,16 +581,27 @@ public class Scraper {
             counter++;
 
             // Json creation/ data extraction succeeded
-
-            zip(filepath, Conf.getArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
-            File del=new File(filepath);
-            del.delete(); // delete the files
+            File tmp=new File(filepath);
+            if(tmp.exists()) {
+                try {
+                    if(!Conf.getConsideredStatus().equals("null"))
+                        zip(filepath, Conf.getFailArchiveDir() + "/Partial"+Conf.getConsideredStatus()+"-" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+                    else
+                        zip(filepath, Conf.getFailArchiveDir() + "/" + filepath.split("/")[filepath.split("/").length - 1].split("\\.")[0] + ".zip");
+                }
+                catch(Exception e1)
+                {
+                    Conf.getLogger().info(filepath + " zip failed : Archivage impossible le fichier n'a pas été supprimé.");
+                }
+                File del = new File(filepath);
+                del.delete(); // delete the files
+            }
         }
     }
 
     static public String[] getDirList(Conf c) {
-        File file = new File(c.getImportDir());
-        String regex = c.getRegex();
+        File file = new File(Conf.getImportDir());
+        String regex = Conf.getRegex();
         String[] tmp = file.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -586,6 +625,4 @@ public class Scraper {
         } else
             return tmp;
     }
-
-
 }

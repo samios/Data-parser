@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="data-parser:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/data_parser_jar</output-path>
+    <root id="root">
+      <element id="archive" name="data-parser.jar">
+        <element id="module-output" name="data-parser" />
+      </element>
+      <element id="library" level="project" name="Maven: org.glassfish:javax.json:1.0.2" />
+      <element id="library" level="project" name="juniversalchardet" />
+      <element id="library" level="project" name="Maven: com.googlecode.juniversalchardet:juniversalchardet:1.0.3" />
+    </root>
+  </artifact>
+</component>
